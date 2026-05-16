@@ -75,12 +75,9 @@ Boot the Pi, SSH in, then:
 curl -fsSL https://raw.githubusercontent.com/GrossmeisterB/soundtouch-cloud-revival/main/setup.sh | bash
 ```
 
-The installer will:
-
-1. Install Docker + Compose v2 (via `get.docker.com`)
-2. Clone this repo and the upstream daemon into `~/soundtouch-cloud-revival/`
-3. Write an empty `config.yaml`
-4. Build and start both containers (`restart: unless-stopped`)
+The installer takes care of everything for you — Docker, the daemon, and
+the web UI. Two to three minutes on a Pi Zero 2 W, then you are done with
+the command line.
 
 When it is done, open in your browser:
 
