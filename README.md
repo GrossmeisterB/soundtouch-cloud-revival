@@ -1,5 +1,7 @@
 # soundtouch-cloud-revival
 
+![soundtouch-cloud-revival — a Raspberry Pi breathing life back into a Bose SoundTouch speaker](docs/hero.jpg)
+
 **Revive your Bose SoundTouch after the Cloud was shut down — Internet radio
 on the physical preset buttons, configured from a web browser in under a
 minute.**
