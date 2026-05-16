@@ -1,0 +1,35 @@
+# soundtouch-cloud-revival — two services running on host networking:
+#   - soundtouch-presets : alinossier daemon that listens for preset
+#     button presses on the SoundTouch and starts the configured UPnP
+#     stream. Source cloned into ./upstream by setup.sh.
+#   - soundtouch-config-ui : Flask web UI on port 8181 that writes
+#     config.yaml and restarts the daemon container via docker.sock.
+
+services:
+  soundtouch-presets:
+    build: ./upstream
+    container_name: soundtouch-presets
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - LOG_LEVEL=INFO
+      - CONFIG_PATH=/app/config.yaml
+      - ENFORCE_PRESETS=true
+      - PRESET_DEBOUNCE_SECONDS=3
+
+  soundtouch-config-ui:
+    build: ./config-ui
+    container_name: soundtouch-config-ui
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./config.yaml:/data/config.yaml:rw
+      - ./stations.yaml:/app/stations.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - CONFIG_PATH=/data/config.yaml
+      - STATIONS_PATH=/app/stations.yaml
+      - DAEMON_CONTAINER=soundtouch-presets
+      - LISTEN_PORT=8181

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% set active = 'setup' %}
+{% block content %}
+<form method="post" action="{{ url_for('save') }}" class="config-form">
+
+  <section class="card">
+    <h2>1 · Speaker</h2>
+    <p class="muted">Pick the SoundTouch device this Pi should control. Auto-discovered via mDNS.</p>
+
+    {% if speakers %}
+      <label for="speaker_select">Discovered speakers</label>
+      <select id="speaker_select" onchange="onSpeakerSelect(this)">
+        <option value="">— choose —</option>
+        {% for name, info in speakers.items() %}
+          <option value="{{ name }}|{{ info.ip }}"
+                  {% if cfg.speaker and cfg.speaker.name == name %}selected{% endif %}>
+            {{ name }} ({{ info.ip }})
+          </option>
+        {% endfor %}
+      </select>
+    {% else %}
+      <p class="warn">
+        No SoundTouch speakers discovered yet. Make sure the Pi and the speaker
+        share the same WLAN, then <a href="{{ url_for('index') }}">refresh</a>.
+        You can also enter the name and IP manually below.
+      </p>
+    {% endif %}
+
+    <div class="row">
+      <div>
+        <label for="speaker_name">Speaker name</label>
+        <input type="text" id="speaker_name" name="speaker_name"
+               value="{{ cfg.speaker.name if cfg.speaker else '' }}"
+               placeholder="e.g. Home" required>
+      </div>
+      <div>
+        <label for="speaker_ip">Preferred IP <span class="hint">(optional)</span></label>
+        <input type="text" id="speaker_ip" name="speaker_ip"
+               value="{{ cfg.speaker.preferred_ip if cfg.speaker and cfg.speaker.preferred_ip else '' }}"
+               placeholder="192.168.x.x">
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2 · Presets</h2>
+    <p class="muted">Pick one station per physical button (1–6). Empty rows are skipped.</p>
+
+    {% for i in range(1, 7) %}
+      {% set p = cfg.presets.get(i) or cfg.presets.get(i|string) if cfg.presets else None %}
+      <div class="preset">
+        <div class="preset-num">{{ i }}</div>
+        <div class="preset-body">
+          <label for="preset_{{ i }}_url">Station</label>
+          <select id="preset_{{ i }}_url" name="preset_{{ i }}_url"
+                  onchange="onStationSelect({{ i }}, this)" data-name-target="preset_{{ i }}_name">
+            <option value="__none__">— none —</option>
+            {% for country in stations | groupby('country') %}
+              <optgroup label="{{ country.grouper }}">
+                {% for s in country.list | sort(attribute='name') %}
+                  <option value="{{ s.stream_url }}"
+                          data-name="{{ s.name }}"
+                          {% if p and p.stream_url == s.stream_url %}selected{% endif %}>
+                    {{ s.name }} <span>· {{ s.genre }}</span>
+                  </option>
+                {% endfor %}
+              </optgroup>
+            {% endfor %}
+            <option value="__custom__"
+                    {% if p and p.stream_url and p.stream_url not in station_urls %}selected{% endif %}>
+              ▸ Custom URL…
+            </option>
+          </select>
+          <input type="hidden" name="preset_{{ i }}_name" id="preset_{{ i }}_name"
+                 value="{{ p.name if p else '' }}">
+
+          <div class="custom-row" id="preset_{{ i }}_custom_row"
+               style="{% if not (p and p.stream_url and p.stream_url not in station_urls) %}display:none{% endif %}">
+            <input type="text" name="preset_{{ i }}_custom_name"
+                   placeholder="Display name"
+                   value="{% if p and p.stream_url not in station_urls %}{{ p.name }}{% endif %}">
+            <input type="text" name="preset_{{ i }}_custom"
+                   placeholder="http://example.com/stream.mp3 (HTTP, never HTTPS)"
+                   value="{% if p and p.stream_url not in station_urls %}{{ p.stream_url }}{% endif %}">
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+
+  <div class="actions">
+    <button type="submit" class="primary">Save &amp; restart daemon</button>
+    <a href="{{ url_for('status') }}" class="secondary">View status →</a>
+  </div>
+</form>
+
+<script>
+  const STATION_URLS = new Set([{% for s in stations %}"{{ s.stream_url|e }}"{% if not loop.last %},{% endif %}{% endfor %}]);
+
+  function onSpeakerSelect(sel) {
+    const v = sel.value;
+    if (!v) return;
+    const [name, ip] = v.split("|");
+    document.getElementById("speaker_name").value = name;
+    document.getElementById("speaker_ip").value = ip;
+  }
+
+  function onStationSelect(idx, sel) {
+    const customRow = document.getElementById(`preset_${idx}_custom_row`);
+    const hiddenName = document.getElementById(`preset_${idx}_name`);
+    if (sel.value === "__custom__") {
+      customRow.style.display = "flex";
+      hiddenName.value = "";
+    } else {
+      customRow.style.display = "none";
+      const opt = sel.options[sel.selectedIndex];
+      hiddenName.value = opt.dataset.name || "";
+    }
+  }
+</script>
+{% endblock %}

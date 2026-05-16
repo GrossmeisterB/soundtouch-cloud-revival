@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% set active = 'status' %}
+{% block content %}
+
+{% if just_saved %}
+<div class="banner success">
+  Configuration saved and daemon restarted. Press a preset on your speaker — the
+  first press after a restart needs about two seconds.
+</div>
+{% endif %}
+
+<section class="card">
+  <h2>Current configuration</h2>
+  <p class="muted">
+    Speaker: <strong>{{ cfg.speaker.name or '—' }}</strong>
+    {% if cfg.speaker.preferred_ip %}({{ cfg.speaker.preferred_ip }}){% endif %}
+  </p>
+
+  <div class="preset-grid">
+    {% for i in range(1, 7) %}
+      {% set p = cfg.presets.get(i) or cfg.presets.get(i|string) if cfg.presets else None %}
+      <div class="preset-tile {% if not p %}empty{% endif %}">
+        <div class="tile-num">{{ i }}</div>
+        <div class="tile-name">{{ p.name if p else '— empty —' }}</div>
+        {% if p %}
+        <form method="post" action="{{ url_for('trigger', preset_id=i) }}" class="tile-trigger">
+          <button type="submit" title="Play this preset now">▶ Play</button>
+        </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card">
+  <h2>Daemon log <span class="muted">(auto-refreshes every 3 s)</span></h2>
+  <pre id="logs">{{ logs }}</pre>
+</section>
+
+<script>
+  async function refreshLogs() {
+    try {
+      const res = await fetch("{{ url_for('logs_json') }}");
+      if (!res.ok) return;
+      const data = await res.json();
+      const el = document.getElementById("logs");
+      el.textContent = data.logs;
+      el.scrollTop = el.scrollHeight;
+    } catch (e) {
+      // ignore
+    }
+  }
+  setInterval(refreshLogs, 3000);
+  document.addEventListener("DOMContentLoaded", () => {
+    const el = document.getElementById("logs");
+    el.scrollTop = el.scrollHeight;
+  });
+</script>
+
+{% endblock %}

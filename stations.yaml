@@ -1,0 +1,61 @@
+# Master station list for soundtouch-cloud-revival.
+#
+# Every URL is HTTP (not HTTPS) — Bose SoundTouch UPnP renderers do not
+# support TLS. 30x redirects from an HTTPS frontend onto an HTTP CDN
+# node also work; what fails is the initial TLS handshake.
+#
+# Verified: 2026-05-16. Streams move and break; please open a PR or
+# issue if you find a dead URL.
+
+stations:
+  # --- Switzerland — SRG-SSR (public broadcaster) ---
+  - { name: "SRF 1",                country: CH, genre: news,      stream_url: "http://stream.srg-ssr.ch/m/drs1/mp3_128" }
+  - { name: "SRF 2 Kultur",         country: CH, genre: culture,   stream_url: "http://stream.srg-ssr.ch/m/drs2/mp3_128" }
+  - { name: "SRF 3",                country: CH, genre: pop,       stream_url: "http://stream.srg-ssr.ch/m/drs3/mp3_128" }
+  - { name: "SRF 4 News",           country: CH, genre: news,      stream_url: "http://stream.srg-ssr.ch/m/drs4news/mp3_128" }
+  - { name: "SRF Musikwelle",       country: CH, genre: oldies,    stream_url: "http://stream.srg-ssr.ch/m/drsmw/mp3_128" }
+  - { name: "SRF Virus",            country: CH, genre: youth,     stream_url: "http://stream.srg-ssr.ch/m/drsvirus/mp3_128" }
+  - { name: "Radio Swiss Jazz",     country: CH, genre: jazz,      stream_url: "http://stream.srg-ssr.ch/m/rsj/mp3_128" }
+  - { name: "Radio Swiss Classic",  country: CH, genre: classical, stream_url: "http://stream.srg-ssr.ch/m/rsc_de/mp3_128" }
+  - { name: "Radio Swiss Pop",      country: CH, genre: pop,       stream_url: "http://stream.srg-ssr.ch/m/rsp/mp3_128" }
+  - { name: "Couleur 3",            country: CH, genre: pop,       stream_url: "http://stream.srg-ssr.ch/m/couleur3/mp3_128" }
+  - { name: "Option Musique",       country: CH, genre: chanson,   stream_url: "http://stream.srg-ssr.ch/m/option-musique/mp3_128" }
+
+  # --- Switzerland — private ---
+  - { name: "Energy Zürich",        country: CH, genre: pop,       stream_url: "http://energyzuerich.ice.infomaniak.ch/energyzuerich-high.mp3" }
+  - { name: "Energy Bern",          country: CH, genre: pop,       stream_url: "http://energybern.ice.infomaniak.ch/energybern-high.mp3" }
+  - { name: "Energy Basel",         country: CH, genre: pop,       stream_url: "http://energybasel.ice.infomaniak.ch/energybasel-high.mp3" }
+  - { name: "FM1",                  country: CH, genre: pop,       stream_url: "http://stream.streambase.ch/fm1/mp3-192" }
+  - { name: "Radio 24",             country: CH, genre: pop,       stream_url: "http://stream.radio24.ch/radio24/mp3-128" }
+
+  # --- United Kingdom — BBC ---
+  - { name: "BBC Radio 1",          country: UK, genre: pop,       stream_url: "http://stream.live.vc.bbcmedia.co.uk/bbc_radio_one" }
+  - { name: "BBC Radio 2",          country: UK, genre: pop,       stream_url: "http://stream.live.vc.bbcmedia.co.uk/bbc_radio_two" }
+  - { name: "BBC Radio 3",          country: UK, genre: classical, stream_url: "http://stream.live.vc.bbcmedia.co.uk/bbc_radio_three" }
+  - { name: "BBC Radio 4",          country: UK, genre: talk,      stream_url: "http://stream.live.vc.bbcmedia.co.uk/bbc_radio_fourfm" }
+  - { name: "BBC Radio 5 Live",     country: UK, genre: talk,      stream_url: "http://stream.live.vc.bbcmedia.co.uk/bbc_radio_five_live" }
+  - { name: "BBC Radio 6 Music",    country: UK, genre: indie,     stream_url: "http://stream.live.vc.bbcmedia.co.uk/bbc_6music" }
+  - { name: "BBC World Service",    country: UK, genre: news,      stream_url: "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service" }
+
+  # --- France — Radio France ---
+  - { name: "FIP",                  country: FR, genre: eclectic,  stream_url: "http://icecast.radiofrance.fr/fip-midfi.mp3" }
+  - { name: "FIP Jazz",             country: FR, genre: jazz,      stream_url: "http://icecast.radiofrance.fr/fipjazz-midfi.mp3" }
+  - { name: "FIP Rock",             country: FR, genre: rock,      stream_url: "http://icecast.radiofrance.fr/fiprock-midfi.mp3" }
+  - { name: "France Inter",         country: FR, genre: talk,      stream_url: "http://icecast.radiofrance.fr/franceinter-midfi.mp3" }
+  - { name: "France Info",          country: FR, genre: news,      stream_url: "http://icecast.radiofrance.fr/franceinfo-midfi.mp3" }
+  - { name: "France Culture",       country: FR, genre: culture,   stream_url: "http://icecast.radiofrance.fr/franceculture-midfi.mp3" }
+  - { name: "France Musique",       country: FR, genre: classical, stream_url: "http://icecast.radiofrance.fr/francemusique-midfi.mp3" }
+
+  # --- Germany — Deutschlandradio ---
+  - { name: "Deutschlandfunk",      country: DE, genre: news,      stream_url: "http://st01.dlf.de/dlf/01/128/mp3/stream.mp3" }
+  - { name: "Deutschlandfunk Kultur", country: DE, genre: culture,  stream_url: "http://st02.dlf.de/dlf/02/128/mp3/stream.mp3" }
+  - { name: "Deutschlandfunk Nova", country: DE, genre: youth,     stream_url: "http://st03.dlf.de/dlf/03/128/mp3/stream.mp3" }
+
+  # --- USA & International ---
+  - { name: "SomaFM Groove Salad",  country: US, genre: chillout,  stream_url: "http://ice1.somafm.com/groovesalad-128-mp3" }
+  - { name: "SomaFM Drone Zone",    country: US, genre: ambient,   stream_url: "http://ice1.somafm.com/dronezone-128-mp3" }
+  - { name: "SomaFM Indie Pop Rocks", country: US, genre: indie,    stream_url: "http://ice1.somafm.com/indiepop-128-mp3" }
+  - { name: "SomaFM Secret Agent",  country: US, genre: lounge,    stream_url: "http://ice1.somafm.com/secretagent-128-mp3" }
+  - { name: "Radio Paradise Main",  country: US, genre: eclectic,  stream_url: "http://stream.radioparadise.com/mp3-128" }
+  - { name: "Radio Paradise Mellow",country: US, genre: chillout,  stream_url: "http://stream.radioparadise.com/mellow-128" }
+  - { name: "Radio Paradise Rock",  country: US, genre: rock,      stream_url: "http://stream.radioparadise.com/rock-128" }

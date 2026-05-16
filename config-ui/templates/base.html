@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SoundTouch Cloud Revival{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span>SoundTouch Cloud Revival</span>
+    </div>
+    <nav>
+      <a href="{{ url_for('index') }}" class="{% if active == 'setup' %}active{% endif %}">Setup</a>
+      <a href="{{ url_for('status') }}" class="{% if active == 'status' %}active{% endif %}">Status &amp; Trigger</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <p>
+      Engine: <a href="https://github.com/alinossier/soundtouch-local-presets" target="_blank" rel="noopener">alinossier/soundtouch-local-presets</a>
+      · UI &amp; setup: <a href="https://github.com/GrossmeisterB/soundtouch-cloud-revival" target="_blank" rel="noopener">soundtouch-cloud-revival</a>
+    </p>
+  </footer>
+</body>
+</html>
